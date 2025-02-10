@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Life System Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .step-counter {
+            color: #8b8b8b;
+            font-size: 0.9em;
+            margin-bottom: 16px;
+        }
+
+        .content {
+            background: #363636;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #4a4a4a;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a5a5a;
+        }
+
+        button:disabled {
+            background: #3a3a3a;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .tip {
+            background: #2a2a2a;
+            border-left: 4px solid #0088cc;
+            padding: 12px;
+            margin-top: 16px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4a4a4a;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #0088cc;
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ultimate Life System Guide</h1>
+        </div>
+        <div class="step-counter">
+            Step <span id="currentStep">1</span> of 6
+        </div>
+        <div class="content">
+            <div id="stepContent"></div>
+            <div class="tip" id="stepTip"></div>
+        </div>
+        <div class="navigation">
+            <button id="prevBtn" onclick="prevStep()">Previous</button>
+            <button id="nextBtn" onclick="nextStep()">Next</button>
+        </div>
+        <div class="dots" id="dots"></div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                title: "⭐ Start Your Day",
+                content: "Click the 'New Day' button to generate today's workspace.",
+                tip: "Look for the New Day button at the top of your Ultimate Life System"
+            },
+            {
+                title: "🙏 Morning Gratitude",
+                content: "Write one thing you're grateful for when prompted.",
+                tip: "Keep it simple - one meaningful entry is all you need"
+            },
+            {
+                title: "📋 Set Daily Priorities",
+                content: "List your top 3 priority tasks in MyPlate section.",
+                tip: "Find 'Top 3 things on MyPlate this week?' and add your most important tasks"
+            },
+            {
+                title: "📊 Access Gratitude Database",
+                content: "Your gratitude entries are stored in a searchable database.",
+                tip: "Navigate to 'FIND DATABASE' → 'Gratitude' to view your collection"
+            },
+            {
+                title: "📱 Organize with MyPlate",
+                content: "Use MyPlate to manage and track all your tasks.",
+                tip: "Access MyPlate from the main navigation menu to organize your priorities"
+            },
+            {
+                title: "📝 End of Day Reflection",
+                content: "Record today's best lesson and most memorable moment.",
+                tip: "Complete 'Add today's lesson' and 'Store today's moment' before closing your day"
+            }
+        ];
+
+        let currentStepIndex = 0;
+
+        function updateContent() {
+            const step = steps[currentStepIndex];
+            document.getElementById('currentStep').textContent = currentStepIndex + 1;
+            document.getElementById('stepContent').innerHTML = `
+                <h2>${step.title}</h2>
+                <p>${step.content}</p>
+            `;
+            document.getElementById('stepTip').innerHTML = `💡 Pro Tip: ${step.tip}`;
+            
+            document.getElementById('prevBtn').disabled = currentStepIndex === 0;
+            document.getElementById('nextBtn').disabled = currentStepIndex === steps.length - 1;
+            
+            updateDots();
+        }
+
+        function createDots() {
+            const dotsContainer = document.getElementById('dots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < steps.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === currentStepIndex ? 'active' : ''}`;
+                dot.onclick = () => goToStep(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.className = `dot ${index === currentStepIndex ? 'active' : ''}`;
+            });
+        }
+
+        function nextStep() {
+            if (currentStepIndex < steps.length - 1) {
+                currentStepIndex++;
+                updateContent();
+            }
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                updateContent();
+            }
+        }
+
+        function goToStep(index) {
+            currentStepIndex = index;
+            updateContent();
+        }
+
+        // Initialize
+        createDots();
+        updateContent();
+    </script>
+</body>
+</html>
